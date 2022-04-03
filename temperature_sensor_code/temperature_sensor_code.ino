@@ -17,12 +17,12 @@ void setup() {
 
 void loop() {
   delay(2000);
-float temperature = dht.readTemperature(); // will return in Celcius
+  float temperature = dht.readTemperature(); // will return in Celcius
 
-if (isnan(temperature){
+  if (isnan(temperature)){
   temperature = 0.0;
-}
+  }
 
-temp_string = std::to_string(temperature);
-Serial.print(temp_string + " Celcius");
+   Serial.println(temperature);
+   
 }
