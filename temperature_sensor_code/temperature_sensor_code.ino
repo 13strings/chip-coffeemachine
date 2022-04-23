@@ -1,28 +1,36 @@
-
-// code guide by https://create.arduino.cc/projecthub/pibots555/how-to-connect-dht11-sensor-with-arduino-uno-f4d239
-
-#include "DHT.h"
-
-#define DHTPIN 2 // the pin that the DHT sensor is connected to
-#define DHTTYPE DHT11 
-
-DHT dht(DHTPIN, DHTTYPE);
-
-void setup() {
+#include <OneWire.h>
+#include <DallasTemperature.h>
+#define ONE_WIRE_BUS 2
+OneWire oneWire(ONE_WIRE_BUS);
+DallasTemperature sensors(&oneWire);
+ float Celcius=0;
+ float Fahrenheit=0;
+ const int Relay_pin = A5;
+ int start = 0;
+ int ledPin = 7;
+void setup(void)
+{
   Serial.begin(9600);
-  Serial.println("Temperature testing");
-
-  dht.begin();
+  sensors.begin();
+  pinMode(ledPin, OUTPUT);
 }
-
-void loop() {
-  delay(2000);
-  float temperature = dht.readTemperature(); // will return in Celcius
-
-  if (isnan(temperature)){
-  temperature = 0.0;
+void loop(void)
+{
+  sensors.requestTemperatures();
+  delay(250);
+  Celcius=sensors.getTempCByIndex(0);
+  Fahrenheit=sensors.toFahrenheit(Celcius);
+  Serial.print(" C  ");
+  Serial.print(Celcius);
+  Serial.print(" F  ");
+  Serial.println(Fahrenheit);
+  
+  if(Celcius >= 75){
+    digitalWrite(ledPin, HIGH);
+    delay(6000)
+    // digitalWrite(Relay_pin, HIGH);
+    // delay(6000);
+    // digitalWrite(Relay_pin, LOW);
+    //exit(0);
   }
-
-   Serial.println(temperature);
-   
-}
+  }
