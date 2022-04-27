@@ -36,34 +36,66 @@ void loop(void)
   sensors.requestTemperatures();
   delay(250);
   Celcius=sensors.getTempCByIndex(0);
-  Serial.print(" C  ");
-  Serial.print(Celcius);
+ // Serial.print(" C  ");
+ // Serial.print(Celcius);
 
+  if (Celcius > 80)
+  {
+    digitalWrite(relay1Pin, LOW);
+  }
  
   buttonState = digitalRead(buttonPin);
 
   if (buttonState == HIGH) {
-    while (timer < 50){
-      digitalWrite(ledPin, HIGH); // turning on LED
-      digitalWrite(relay1Pin, HIGH); // turning on heater
-      delay(2400);
-      timer ++;
-      Celcius=sensors.getTempCByIndex(0);
-      Serial.print(" C  ");
-      Serial.print(Celcius);
-
-    }
-    digitalWrite(relay1Pin, LOW);
-    digitalWrite(ledPin, LOW);
+    if (Celcius > 35){
+      while (timer < 30){ // chanage back to 50 for cold water `
+        digitalWrite(ledPin, HIGH); // turning on LED
+        digitalWrite(relay1Pin, HIGH); // turning on heater
+        delay(2400);
+        timer ++;
+        Celcius=sensors.getTempCByIndex(0);
+        //Serial.print(" C  ");
+        //Serial.print(Celcius);
+        Serial.println(timer);
+          if (Celcius > 80)
+            {
+              digitalWrite(relay1Pin, LOW);
+            }
   
-    digitalWrite(relay2Pin, HIGH);
-    delay(7000);
-
-    digitalWrite(relay2Pin, LOW); 
+      }
+      digitalWrite(relay1Pin, LOW);
+      digitalWrite(ledPin, LOW);
     
-    // turn on pump
+      digitalWrite(relay2Pin, HIGH);
+      delay(12000);
+  
+      digitalWrite(relay2Pin, LOW);  
+    }
+    else {
+      while (timer < 50){ // chanage back to 50 for cold water `
+        digitalWrite(ledPin, HIGH); // turning on LED
+        digitalWrite(relay1Pin, HIGH); // turning on heater
+        delay(2400);
+        timer ++;
+        Celcius=sensors.getTempCByIndex(0);
+        //Serial.print(" C  ");
+        //Serial.print(Celcius);
+        Serial.println(timer);
+          if (Celcius > 80)
+            {
+              digitalWrite(relay1Pin, LOW);
+            }
+  
+      }
+      digitalWrite(relay1Pin, LOW);
+      digitalWrite(ledPin, LOW);
     
+      digitalWrite(relay2Pin, HIGH);
+      delay(12000);
+  
+      digitalWrite(relay2Pin, LOW);  
   }
 
 }
- // https://tutorial.cytron.io/2012/08/01/identify-terminal-pins-of-a-relay-without-reference-to-datasheet-2/
+
+}
